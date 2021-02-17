@@ -1,10 +1,14 @@
 import React, { Component} from 'react';
 import {View,Text} from 'react-native';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import reducers from './src/reducers'
 import firebase from 'firebase'
-import LoginForm from './src/components/LoginForm'
+import ReduxThunk from 'redux-thunk'
+import AppNavigator from './src/navigation/app-navigator'
+import {NavigationContainer} from '@react-navigation/native';
+import { navigationRef } from './src/utils/RootNavigation'
+
 class App extends Component {
 
   componentDidMount() {
@@ -23,8 +27,10 @@ class App extends Component {
 
   render() {
     return (
-      <Provider store={createStore(reducers)}>
-        <LoginForm/>
+      <Provider store={createStore(reducers, {} , applyMiddleware(ReduxThunk))}>
+        <NavigationContainer ref={navigationRef}>
+          <AppNavigator/>
+        </NavigationContainer>
       </Provider>
     )
   }
